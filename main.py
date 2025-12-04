@@ -695,24 +695,70 @@ async def main():
     logger.info("Bot started. Press Ctrl+C to stop.")
     await app.idle()
 
+# ---------- WEBHOOK + FLASK + THREADING SETUP ----------
 import threading
 import asyncio
-from flask import Flask
+from flask import Flask, request
+from telegram import Update
 
+# Flask app for Render health & webhook endpoint
 app = Flask(__name__)
 
 @app.get("/")
 def home():
     return "Bot is running"
 
-def start_bot():
-    asyncio.run(main())
+# webhook route where Telegram will POST updates
+@app.post("/webhook")
+def telegram_webhook():
+    data = request.get_json(force=True)
+    if not data:
+        return "no data", 400
+    # convert incoming json to Update object
+    update = Update.de_json(data, application.bot)
+    # put update into application's queue from another thread
+    asyncio.run_coroutine_threadsafe(application.update_queue.put(update), bot_loop)
+    return "OK"
 
+# helper: run an asyncio loop forever in a thread
+def start_loop(loop):
+    asyncio.set_event_loop(loop)
+    loop.run_forever()
+
+# coroutine to initialize + start the PTB application and set webhook
+async def setup_bot():
+    await application.initialize()
+    await application.start()
+
+    # delete old webhook and set new webhook URL from env
+    webhook_url = os.getenv("WEBHOOK_URL")
+    if not webhook_url:
+        print("WEBHOOK_URL not set in environment")
+    else:
+        await application.bot.delete_webhook(drop_pending_updates=True)
+        await application.bot.set_webhook(webhook_url)
+        print("Webhook set to:", webhook_url)
+
+# --------- start everything ----------
 if __name__ == "__main__":
-    bot_thread = threading.Thread(target=start_bot)
-    bot_thread.start()
+    # create dedicated event loop for bot and run it in a daemon thread
+    bot_loop = asyncio.new_event_loop()
+    t = threading.Thread(target=start_loop, args=(bot_loop,), daemon=True)
+    t.start()
 
+    # run the async setup (initialize, start, set webhook) on that loop and wait for it
+    future = asyncio.run_coroutine_threadsafe(setup_bot(), bot_loop)
+    try:
+        # wait for setup to finish (timeout optional)
+        future.result(timeout=30)
+    except Exception as e:
+        print("Error starting bot:", e)
+        raise
+
+    # start Flask (main thread). Render will use gunicorn -> expose port
     app.run(host="0.0.0.0", port=10000)
+
+
 
 
 
