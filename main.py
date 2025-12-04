@@ -27,11 +27,12 @@ from telegram.ext import (
 try:
     from config import BOT_TOKEN, MAIN_CHANNEL_ID, ADMIN_GROUP_ID, ADMIN_USER_IDS, MIN_FOLLOWERS_DEFAULT
 except Exception:
-    BOT_TOKEN = os.getenv("8584891759:AAGds400yEwDwk8LrqwiXLVyB5LxaTdMkrE")
-    MAIN_CHANNEL_ID = int(os.getenv("MAIN_CHANNEL_ID", "-1002863809955"))
-    ADMIN_GROUP_ID = int(os.getenv("ADMIN_GROUP_ID", "-4992382090"))
-    ADMIN_USER_IDS = [int(x) for x in os.getenv("ADMIN_USER_IDS", "5119859581").split(",") if x.strip()]
-    MIN_FOLLOWERS_DEFAULT = int(os.getenv("MIN_FOLLOWERS_DEFAULT", "1000"))
+    BOT_TOKEN = "8584891759:AAGds400yEwDwk8LrqwiXLVyB5LxaTdMkrE"
+    MAIN_CHANNEL_ID = -1002863809955
+    ADMIN_GROUP_ID = -4992382090
+    ADMIN_USER_IDS = [5119859581]
+    MIN_FOLLOWERS_DEFAULT = 1000
+
 
 if not BOT_TOKEN:
     raise RuntimeError("BOT_TOKEN not set in environment or config.py")
@@ -694,21 +695,25 @@ async def main():
     logger.info("Bot started. Press Ctrl+C to stop.")
     await app.idle()
 
-if __name__ == "__main__":
-    import asyncio
-    # ---- your telegram bot code upar rahega ----
-
+import threading
+import asyncio
 from flask import Flask
+
 app = Flask(__name__)
 
 @app.get("/")
 def home():
     return "Bot is running"
 
+def start_bot():
+    asyncio.run(main())
+
 if __name__ == "__main__":
-    # Local testing
+    bot_thread = threading.Thread(target=start_bot)
+    bot_thread.start()
+
     app.run(host="0.0.0.0", port=10000)
 
-    asyncio.run(main())
+
 
 
