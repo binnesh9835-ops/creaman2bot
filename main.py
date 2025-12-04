@@ -696,5 +696,19 @@ async def main():
 
 if __name__ == "__main__":
     import asyncio
+    # ---- your telegram bot code upar rahega ----
+
+from flask import Flask
+app = Flask(__name__)
+
+@app.get("/")
+def home():
+    return "Bot is running"
+
+if __name__ == "__main__":
+    # Local testing
+    app.run(host="0.0.0.0", port=10000)
+
     asyncio.run(main())
+
 
