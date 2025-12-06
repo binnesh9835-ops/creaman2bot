@@ -716,42 +716,6 @@ A structured, premium workspace for creators & managers who value clarity, perfo
 Thank you for joining the network.
 Before we set up your panel, you must complete a quick verification to keep the system clean, secure, and spam-free.
 
-🔰 Step 1 — Join the Official Channel
-
-All updates, work formats, payout notices, and weekly instructions are shared only in our main channel.
-Please join using the button below:
-
-👉 Join Channel
-https://t.me/+9LcJQuKxL_FhNzBl
-
-🔰 Step 2 — Return to the Bot
-
-After joining, come back here and tap Continue.
-The bot will automatically verify your membership and guide you based on your role.
-
-📌 Creators Get:
-
-• Personal work dashboard
-• Reel upload instructions
-• Weekly view-count tracking
-• Automated payment status
-• Complete support inside the system
-
-📌 Managers Get:
-
-• Team setup panel
-• Weekly target management
-• Sheet-based workflow
-• Error-checking automation
-• Transparent payout summaries
-
-Everything here runs through a smooth, organized system.
-Follow each step — and let the network handle the rest.
-
-Welcome aboard.
-Your earning journey starts now. 🚀")
-
-
 # -------------------------
 # Main setup
 # -------------------------
@@ -766,5 +730,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
