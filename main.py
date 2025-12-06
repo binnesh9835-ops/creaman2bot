@@ -710,7 +710,7 @@ BOT_TOKEN = "8584891759:AAGds400yEwDwk8LrqwiXLVyB5LxaTdMkrE"   # apna token daal
 # Example start handler
 # -------------------------
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("🌐 Welcome to CreaManNetwork
+    await update.message.reply_text("🌐" Welcome to CreaManNetwork
 A structured, premium workspace for creators & managers who value clarity, performance, and consistent earnings.
 
 Thank you for joining the network.
@@ -766,4 +766,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
