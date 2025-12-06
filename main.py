@@ -704,14 +704,18 @@ async def main():
     # application.add_handler(CommandHandler("start", start_handler))
 
     print("Bot started...")
+
+    # ye 3 lines long-polling ke liye sahi method hai
     await application.initialize()
     await application.start()
-    await application.updater.start_polling()
-    await application.idle()
+    await application.run_polling()   # <-- ye sahi line hai
+
+    await application.stop()
 
 if __name__ == "__main__":
     import asyncio
     asyncio.run(main())
+
 
 
 
