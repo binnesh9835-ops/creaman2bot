@@ -695,26 +695,38 @@ async def main():
     logger.info("Bot started. Press Ctrl+C to stop.")
     await app.idle()
 
-from telegram.ext import ApplicationBuilder
+import os
+from telegram.ext import (
+    ApplicationBuilder,
+    CommandHandler,
+    MessageHandler,
+    CallbackQueryHandler,
+    filters
+)
 
-async def main():
+BOT_TOKEN = "8584891759:AAGds400yEwDwk8LrqwiXLVyB5LxaTdMkrE"   # apna token daal
+
+# -------------------------
+# Example start handler
+# -------------------------
+async def start(update, context):
+    await update.message.reply_text("Bot is working bro!")
+
+# -------------------------
+# Main setup
+# -------------------------
+def main():
     application = ApplicationBuilder().token(BOT_TOKEN).build()
 
-    # yaha handlers add karo
-    # application.add_handler(CommandHandler("start", start_handler))
+    # handlers yaha add karo
+    application.add_handler(CommandHandler("start", start))
 
-    print("Bot started...")
-
-    # ye 3 lines long-polling ke liye sahi method hai
-    await application.initialize()
-    await application.start()
-    await application.run_polling()   # <-- ye sahi line hai
-
-    await application.stop()
+    print("Bot polling started...")
+    application.run_polling()
 
 if __name__ == "__main__":
-    import asyncio
-    asyncio.run(main())
+    main()
+
 
 
 
